@@ -1,0 +1,38 @@
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Message } from './Model/Message.model';
+import { MessageService } from './message.service';
+
+@Controller('message')
+export class MessageController {
+  constructor(private readonly messageService: MessageService) {}
+
+  @Get()
+  async getAll(): Promise<Message[]> {
+	return this.messageService.getMessages();
+  }
+
+  @Get(':id')
+  async getOne(@Param('id') id: string): Promise<Message> {
+	return this.messageService.getMessage(id);
+  }
+
+  @Post()
+  async create(@Body() Message: Message): Promise<Message> {
+	return this.messageService.createMessage(Message);
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() Message: Message): Promise<Message> {
+	return this.messageService.updateMessage(id, Message);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<Message> {
+	return this.messageService.deleteMessage(id);
+  }
+
+  @Get('user/:id')
+  async getByUser(@Param('id') id: string): Promise<Message[]> {
+	return this.messageService.getMessagesByUser(id);
+  }
+}

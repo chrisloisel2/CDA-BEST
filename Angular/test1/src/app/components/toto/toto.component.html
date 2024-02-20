@@ -1,0 +1,12 @@
+<div class="toto" *ngIf="visible">
+  <p>
+	{{ user.prenom }}
+  </p>
+	<p>
+		{{ user.nom }}
+		</p>
+	<p>
+	{{ user.age }}
+	</p><br>
+	<app-cpt (buttonClicked)="buttonClicked($event)"></app-cpt>
+</div>

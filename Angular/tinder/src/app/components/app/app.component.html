@@ -1,0 +1,6 @@
+<div id="container">
+	<app-liked [likedUsers]="this.likedUsers"></app-liked>
+	<app-card [user]="users[this.selectedUser]" (likeEmitter)="onLike()" (dislikeEmitter)="onDislike()"></app-card>
+	<app-disliked [dislikedUsers]="this.dislikedUsers"></app-disliked>
+</div>
+
