@@ -21,7 +21,8 @@
     </ul>
 	<div class="form-inline my-2 my-lg-0">
 		<p *ngIf="this.auth.CurrentUser?.username">{{this.auth.CurrentUser?.username}}</p>
-		<a *ngIf="!this.auth.CurrentUser?.username" href="/login">Connectez-Vous</a>
+		<a routerLink="/login">Connectez-Vous</a><br>
+		<a routerLink="/">Home</a>
 	</div>
   </div>
 </nav>

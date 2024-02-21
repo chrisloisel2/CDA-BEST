@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../Services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ import { AuthService } from '../../Services/auth.service';
 })
 export class LoginComponent {
 
-	constructor(private fb: FormBuilder, private auth : AuthService) { }
+	constructor(private fb: FormBuilder, private auth : AuthService, public nav : Router) { }
 
 	// Creer mon formulaire de login avec FormBuilder
 
@@ -24,8 +25,7 @@ export class LoginComponent {
 
 	onSubmit() {
 		console.log(this.formLogin.value);
-		this.auth.login(this.formLogin.value.username, this.formLogin.value.password).then((res) => {
-			console.log(res);
-		})
+		let reponse = this.auth.login(this.formLogin.value.username, this.formLogin.value.password);
+		this.nav.navigateByUrl('/')
 	}
 }

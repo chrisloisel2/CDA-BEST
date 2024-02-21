@@ -11,7 +11,7 @@ const LoginPage = () => {
 
 	const login = (userData) => {
 		console.log(userData);
-		axios.post('http://localhost:4200/user/login', userData).then((response) => {
+		axios.post('http://localhost:3050/user/login', userData).then((response) => {
 			setUser(response.data);
 			console.log(user);
 			if (response.data.error) {

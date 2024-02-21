@@ -22,6 +22,11 @@ export class MessageController {
 	return this.messageService.createMessage(Message);
   }
 
+  @Get('/:senderid/:receiverid')
+  async getMessagesByUser(@Param('senderid') senderid: string, @Param('receiverid') receiverid : string ): Promise<IMessage[]> {
+	return this.messageService.getMessagesByUser(senderid, receiverid);
+  }
+
   @Put(':id')
   async update(@Param('id') id: string, @Body() Message: IMessage): Promise<IMessage> {
 	return this.messageService.updateMessage(id, Message);

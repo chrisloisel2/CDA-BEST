@@ -1,0 +1,21 @@
+.container{
+	  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #feffdb;
+  display: flex;
+  flex-direction: row;
+  align-items: space-between;
+  justify-content: space-evenly;
+}
+
+.users {
+	height: 100%;
+	width: 27%;
+}
+
+.message {
+	height: 100%;
+	width: 70%;
+}

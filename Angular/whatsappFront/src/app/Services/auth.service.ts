@@ -11,14 +11,18 @@ export class AuthService {
 
   constructor() { }
 
-	login(username: string | undefined | null, password: string | undefined | null) : Promise<any> {
-		return axios.post('http://localhost:3050/user/login', {
+	login(username: string | undefined | null, password: string | undefined | null) {
+		axios.post('http://localhost:3050/user/login', {
 			username: username,
 			password: password
 			}).then((res) => {
 				this.CurrentUser = res.data;
 			}
+		).finally(() => {
+			return this.CurrentUser;
+		}
 		);
+
 	}
 
 	logout() {
@@ -26,12 +30,16 @@ export class AuthService {
 	}
 
 	signin(username: string | undefined | null, password: string | undefined | null) {
-		return axios.post('http://localhost:3050/user/signin', {
+		axios.post('http://localhost:3050/user/login', {
 			username: username,
 			password: password
 			}).then((res) => {
 				this.CurrentUser = res.data;
 			}
-		);	}
+		).finally(() => {
+			return this.CurrentUser;
+		}
+		);
+	}
 
 }

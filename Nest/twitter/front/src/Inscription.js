@@ -12,7 +12,7 @@ const SignInPage = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		axios.post('http://localhost:4200/user', {
+		axios.post('http://localhost:3050/user', {
 			username: username,
 			password: password
 		}).then((response) => {

@@ -19,7 +19,7 @@ const HomePage = () => {
 		if (!user) {
 			navigate('/');
 		}
-		const newSocket = io('http://localhost:4200', { withCredentials: false });
+		const newSocket = io('http://localhost:3050', { withCredentials: false });
 		setSocket(newSocket);
 
 		newSocket.on('clickage', (payload) => {
@@ -30,7 +30,7 @@ const HomePage = () => {
 			setcpt(nb);
 		});
 
-		axios.get('http://localhost:4200/user').then((response) => {
+		axios.get('http://localhost:3050/user').then((response) => {
 			setusers(response.data);
 		});
 
