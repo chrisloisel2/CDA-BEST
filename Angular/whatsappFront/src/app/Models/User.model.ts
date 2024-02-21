@@ -3,3 +3,9 @@ export interface User{
 	password: string;
 	_id: string;
 }
+
+export interface UserDTO{
+	username: string | undefined | null;
+	password:  string | undefined | null
+}
+

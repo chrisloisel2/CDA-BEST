@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../Services/auth.service';
 import { Router } from '@angular/router';
+import { User, UserDTO } from '../../Models/User.model';
 
 @Component({
   selector: 'app-login',
@@ -24,8 +25,7 @@ export class LoginComponent {
 	)
 
 	onSubmit() {
-		console.log(this.formLogin.value);
-		let reponse = this.auth.login(this.formLogin.value.username, this.formLogin.value.password);
-		this.nav.navigateByUrl('/')
+		this.auth.login(this.formLogin.value)
+		this.nav.navigateByUrl('/');
 	}
 }

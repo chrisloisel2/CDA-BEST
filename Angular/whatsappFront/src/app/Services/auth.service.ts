@@ -1,45 +1,30 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { User } from '../Models/User.model';
+import { User, UserDTO } from '../Models/User.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map, tap } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-	CurrentUser: User | undefined | null;
+	CurrentUser! : User;
 
-  constructor() { }
+	Url = 'http://localhost:3050';
 
-	login(username: string | undefined | null, password: string | undefined | null) {
-		axios.post('http://localhost:3050/user/login', {
-			username: username,
-			password: password
-			}).then((res) => {
-				this.CurrentUser = res.data;
-			}
-		).finally(() => {
-			return this.CurrentUser;
-		}
-		);
+	constructor(public http : HttpClient) { }
 
+	login(user : any) {
+		return this.http.post<User>(this.Url + '/user/login', user).pipe(
+			tap((response) => {
+				this.CurrentUser = response;
+				})
+		)
 	}
 
-	logout() {
-		console.log('logout');
+	signin(user : UserDTO) {
+		return this.http.post(this.Url + '/user', user);
 	}
-
-	signin(username: string | undefined | null, password: string | undefined | null) {
-		axios.post('http://localhost:3050/user/login', {
-			username: username,
-			password: password
-			}).then((res) => {
-				this.CurrentUser = res.data;
-			}
-		).finally(() => {
-			return this.CurrentUser;
-		}
-		);
-	}
-
 }
