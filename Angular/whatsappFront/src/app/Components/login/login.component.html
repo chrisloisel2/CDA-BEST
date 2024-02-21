@@ -1,0 +1,10 @@
+<h1> Veillez vous connecter</h1>
+<form [formGroup]="formLogin" (ngSubmit)="onSubmit()">
+	<div class="form-group">
+		<label for="text">Username
+		<input type="text" class="form-control" id="username" formControlName="username"></label>
+		<label for="password">Password
+		<input type="password" class="form-control" id="password" formControlName="password"></label>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</div>
+</form>

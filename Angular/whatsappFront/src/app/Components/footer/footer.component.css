@@ -1,0 +1,24 @@
+/* FILEPATH: /Users/christopher/CDA-BEST/Angular/whatsappFront/src/app/Components/footer/footer.component.css */
+
+.footer {
+  background-color: #939393;
+  padding: 30px;
+  text-align: center;
+  position: fixed;
+  height: 60px;
+  width: 100%;
+  bottom: 0;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer a {
+  color: #888;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #555;
+}
