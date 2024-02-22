@@ -25,7 +25,7 @@ export class LoginComponent {
 	)
 
 	onSubmit() {
-		this.auth.login(this.formLogin.value)
+		this.auth.login(this.formLogin.value).subscribe()
 		this.nav.navigateByUrl('/');
 	}
 }

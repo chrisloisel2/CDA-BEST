@@ -15,13 +15,13 @@ export class UserListComponent implements OnInit{
 	constructor(public users: UserService) { }
 
 	ngOnInit() {
-		this.users.getUserList();
+		this.users.getUserList().subscribe();
 	}
 
 	onClick(user : User)
 	{
 		console.log("User selected : " + user._id);
 		this.users.UserSelected = user;
-		this.users.getMsgList();
+		this.users.getMsgList().subscribe();
 	}
 }

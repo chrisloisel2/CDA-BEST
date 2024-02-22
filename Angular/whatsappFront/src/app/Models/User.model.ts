@@ -4,6 +4,7 @@ export interface User{
 	_id: string;
 }
 
+// Data Transfer Object
 export interface UserDTO{
 	username: string | undefined | null;
 	password:  string | undefined | null

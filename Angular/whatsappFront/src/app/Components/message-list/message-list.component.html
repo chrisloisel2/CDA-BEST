@@ -2,3 +2,6 @@
 <div *ngFor="let item of this.user.MsgList">
 	<p>{{item.message}}</p>
 </div>
+<p>{{this.msg}}</p>
+<input type="text" placeholder="Je suis le message" class="box" [(ngModel)]="this.msg"/>
+<button (click)="sendMessage()">Envoyer</button>
