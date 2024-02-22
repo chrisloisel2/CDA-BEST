@@ -1,0 +1,30 @@
+{
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"exemple1/node_modules": true,
+		"exemple1/src/App.test.js": true,
+		"exemple1/.gitignore": true,
+		"exemple1/package-lock.json": true,
+		"exemple1/package.json": true,
+		"exemple1/README.md": true,
+		"exemple1/src/logo.svg": true,
+		"exemple1/src/setupTests.js": true,
+		"exemple1/src/reportWebVitals.js": true
+	},
+	"hide-files.files": [
+		"exemple1/node_modules",
+		"exemple1/src/App.test.js",
+		"exemple1/.gitignore",
+		"exemple1/package-lock.json",
+		"exemple1/package.json",
+		"exemple1/README.md",
+		"exemple1/src/logo.svg",
+		"exemple1/src/setupTests.js",
+		"exemple1/src/reportWebVitals.js"
+	]
+}
