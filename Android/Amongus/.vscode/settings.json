@@ -1,0 +1,28 @@
+{
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"back/loup-garou-backend/.eslintrc.js": true,
+		"back/loup-garou-backend/.prettierrc": true,
+		"back/loup-garou-backend/nest-cli.json": true,
+		"back/loup-garou-backend/package.json": true,
+		"back/loup-garou-backend/README.md": true,
+		"back/loup-garou-backend/tsconfig.build.json": true,
+		"back/loup-garou-backend/tsconfig.json": true,
+		"back/loup-garou-backend/test": true
+	},
+	"hide-files.files": [
+		"back/loup-garou-backend/.eslintrc.js",
+		"back/loup-garou-backend/.prettierrc",
+		"back/loup-garou-backend/nest-cli.json",
+		"back/loup-garou-backend/package.json",
+		"back/loup-garou-backend/README.md",
+		"back/loup-garou-backend/tsconfig.build.json",
+		"back/loup-garou-backend/tsconfig.json",
+		"back/loup-garou-backend/test"
+	]
+}
