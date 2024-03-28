@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
-import { GameController } from './game/game.controller';
 import { GameService } from './game/game.service';
 import { GameModule } from './game/game.module';
 
@@ -9,7 +8,6 @@ import { GameModule } from './game/game.module';
 	UsersModule,
 	GameModule,
 ],
-  controllers: [GameController],
   providers: [GameService],
 })
 export class AppModule {}

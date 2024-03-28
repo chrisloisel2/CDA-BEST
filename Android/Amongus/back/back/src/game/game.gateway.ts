@@ -8,6 +8,7 @@ export class GameGateway {
 
   constructor(private gameService: GameService) {}
 
+
   @SubscribeMessage('connectPlayer')
   handleConnection(client: any, @MessageBody() data: { userId: string }) {
     this.gameService.connectUser(data.userId);

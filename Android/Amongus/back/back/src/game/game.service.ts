@@ -5,15 +5,20 @@ export class GameService {
   private users: any[] = [];
   private votes: Map<string, string> = new Map();
   private turn = 0;
+  private roles: string[] = ['Loup Garou', 'vilageois', 'vilageois', 'vilageois'];
 
   connectUser(userId: string) {
     const user = this.users.find(user => user.id === userId);
     if (user) {
       user.connected = true;
     } else {
+		// Ajout d'un role pour chaque joueur
+      const role = this.roles.pop();
       this.users.push({ id: userId, connected: true, alive: true, votesReceived: 0 });
     }
   }
+
+
 
   disconnectUser(userId: string) {
     const user = this.users.find(user => user.id === userId);

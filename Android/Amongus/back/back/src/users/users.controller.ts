@@ -6,6 +6,11 @@ import { UsersService } from './users.service';
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
+	@Get()
+	async findAll(): Promise<User[]> {
+	  return this.usersService.findAll();
+	}
+
 	@Post('register')
 	async register(@Body() body: any) {
 	  return this.usersService.register(body.name, body.password);
