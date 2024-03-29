@@ -8,12 +8,12 @@ export class GameGateway {
 
   constructor(private gameService: GameService) {}
 
-
   @SubscribeMessage('connectPlayer')
   handleConnection(client: any, @MessageBody() data: { userId: string }) {
     this.gameService.connectUser(data.userId);
     this.server.emit('playerConnected', { userId: data.userId });
   }
+
 
   @SubscribeMessage('disconnectPlayer')
   handleDisconnect(@MessageBody() data: { userId: string }) {
@@ -34,6 +34,7 @@ export class GameGateway {
     if (this.gameService.checkVotesCompletion()) {
       const results = this.gameService.processVotes();
       this.server.emit('endVote', results);
+	  this.handleKill({ userId: results });
       this.gameService.resetVotes();
       this.gameService.nextTurn();
     }

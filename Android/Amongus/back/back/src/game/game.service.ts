@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { send } from 'process';
+import { GameGateway } from './game.gateway';
 
 @Injectable()
 export class GameService {
@@ -6,6 +8,12 @@ export class GameService {
   private votes: Map<string, string> = new Map();
   private turn = 0;
   private roles: string[] = ['Loup Garou', 'vilageois', 'vilageois', 'vilageois'];
+  private gameGateway: GameGateway;
+
+
+  GameService(gameGateway : GameGateway) {
+	this.gameGateway = gameGateway;
+  }
 
   connectUser(userId: string) {
     const user = this.users.find(user => user.id === userId);
@@ -18,6 +26,14 @@ export class GameService {
     }
   }
 
+
+  numberOfAlivePlayers() {
+	return this.users.filter(user => user.alive).length;
+  }
+
+  numberOfAliveWolves() {
+	return this.users.filter(user => user.alive && user.role === 'Loup Garou').length;
+  }
 
 
   disconnectUser(userId: string) {
@@ -47,7 +63,7 @@ export class GameService {
   }
 
   processVotes() {
-    const results = [];
+	let userId : string;
     let maxVotes = 0;
     this.users.forEach(user => {
       if (user.votesReceived > maxVotes) {
@@ -56,11 +72,11 @@ export class GameService {
     });
     this.users.forEach(user => {
       if (user.votesReceived === maxVotes) {
-        results.push(user.id);
+        userId = user.id;
         user.alive = false; // Assuming the user with the most votes is eliminated
       }
     });
-    return results;
+    return userId;
   }
 
   resetVotes() {

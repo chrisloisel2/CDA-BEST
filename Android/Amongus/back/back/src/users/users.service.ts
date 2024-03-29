@@ -22,15 +22,15 @@ export class UsersService {
 
 	  async login(name: string, password: string): Promise<{ message: string, user : User }> {
 		const user = this.database.find(user => user.name === name && user.password === password);
-		if (user) {
-		  user.connected = true;
 
-		  this.database.forEach(user => {
-			if (user.name === name && user.password === password) {
-			  user.connected = true;
+		if (user) {
+		  this.database.map(u => {
+			if (u.name === name) {
+			  u.connected = true;
 			}
 		  }
 		  );
+		  user.connected = true;
 		  return { message: 'Connected', user };
 		}
 	  }
