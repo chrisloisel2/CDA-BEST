@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 import { loginUser, registerUser} from '../Services/FetcherService';
 
-const Connection = () => {
+const Connection = ({ navigation }: any)  => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
 	const handleLogin = () => {
 		loginUser(username, password);
+		// naviguer d'un écran à un autre
+		navigation.navigate('Game');
 		console.log('Logging in...');
 	};
 
