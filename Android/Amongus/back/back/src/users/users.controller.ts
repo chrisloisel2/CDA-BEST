@@ -11,6 +11,11 @@ export class UsersController {
 	  return this.usersService.getUsers();
 	}
 
+	@Get()
+	async findAll(): Promise<User[]> {
+	  return this.usersService.findAll();
+	}
+
 	@Post('register')
 	async register(@Body() body: any) {
 
