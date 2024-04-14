@@ -1,14 +1,30 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { User } from './Models/UserSchema';
-import { UsersService } from './users.service';
+import { UserService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-	constructor(private readonly usersService: UsersService) {}
+	constructor(private readonly usersService: UserService) {}
+
+	@Get()
+	async findAll(): Promise<User[]> {
+	  return this.usersService.getUsers();
+	}
 
 	@Post('register')
 	async register(@Body() body: any) {
-	  return this.usersService.register(body.name, body.password);
+
+	  let user : User = {
+		_id: null,
+		name: body.name,
+		password: body.password,
+		connected: false,
+		role : "",
+		votes: [],
+		isAlive: true,
+	  }
+
+	  return this.usersService.createUser(user);
 	}
 
 	@Get('connected')
@@ -17,8 +33,8 @@ export class UsersController {
 	}
 
 	@Post('disconnect')
-	async disconnect(@Body() body: any) {
-	  return this.usersService.disconnect(body.name);
+	async disconnect(@Body() body: User) {
+	  return this.usersService.disconnect(body._id);
 	}
 
 	@Post('login')

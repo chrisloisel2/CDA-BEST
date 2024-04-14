@@ -1,51 +1,44 @@
-import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { Server, WebSocket } from 'ws';
+import User from 'src/users/Models/UserSchema';
 import { GameService } from './game.service';
 
 @WebSocketGateway()
-export class GameGateway {
+export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
-  constructor(private gameService: GameService) {}
+  constructor(private readonly GameService: GameService) {}
 
-  @SubscribeMessage('connectPlayer')
-  handleConnection(client: any, @MessageBody() data: { userId: string }) {
-    this.gameService.connectUser(data.userId);
-    this.server.emit('playerConnected', { userId: data.userId });
+
+  handleConnection(client: WebSocket, ...args: any[]) {
+    console.log('Client connected');
   }
 
-  @SubscribeMessage('disconnectPlayer')
-  handleDisconnect(@MessageBody() data: { userId: string }) {
-    this.gameService.disconnectUser(data.userId);
-    this.server.emit('playerDisconnected', { userId: data.userId });
+  handleDisconnect(client: WebSocket) {
+    console.log('Client disconnected');
   }
 
-  @SubscribeMessage('nextTurn')
-  handleNextTurn() {
-    this.gameService.nextTurn();
-    this.server.emit('nextTurn');
+  @SubscribeMessage('message')
+  handleMessage(client: WebSocket, @MessageBody() payload: string): void {
+	console.log('Message received:', payload);
+	this.server.clients.forEach((client: WebSocket) => {
+	  if (client.readyState === WebSocket.OPEN) {
+		client.send(`Message received: ${payload}`);
+	  } else {
+		console.log(`Skipping client as the connection is not open (readyState: ${client.readyState})`);
+	  }
+	});
   }
 
-  @SubscribeMessage('vote')
-  handleVote(@MessageBody() data: { voterId: string; votedId: string }) {
-    this.gameService.vote(data.voterId, data.votedId);
-    this.server.emit('voteReceived', data);
-    if (this.gameService.checkVotesCompletion()) {
-      const results = this.gameService.processVotes();
-      this.server.emit('endVote', results);
-      this.gameService.resetVotes();
-      this.gameService.nextTurn();
-    }
-  }
-
-  @SubscribeMessage('sendMessage')
-  handleMessage(@MessageBody() data: { userId: string; message: string }) {
-    this.server.emit('messageReceived', data);
-  }
-
-  @SubscribeMessage('killPlayer')
-  handleKill(@MessageBody() data: { userId: string }) {
-    this.gameService.killUser(data.userId);
-    this.server.emit('playerKilled', { userId: data.userId });
+  @SubscribeMessage('start')
+  handleStartUser(client: WebSocket, @MessageBody() payload: User): void {
+	console.log('User connecté:', payload);
+	this.server.clients.forEach((client: WebSocket) => {
+	  if (client.readyState === WebSocket.OPEN) {
+		client.send(GameService);
+	  } else {
+		console.log(`Skipping client as the connection is not open (readyState: ${client.readyState})`);
+	  }
+	});
   }
 }

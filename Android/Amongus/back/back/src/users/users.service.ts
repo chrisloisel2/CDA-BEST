@@ -1,52 +1,62 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './Models/UserSchema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import User from './Models/UserSchema'; // Ensure this path is correct
 
 @Injectable()
-export class UsersService {
+export class UserService {
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<User>, // Ensure the User model is correctly imported and decorated
+  ) {}
 
-	database: User[] = [];
+  // Find all connected users
+  async findConnected(): Promise<User[]> {
+    return this.userModel.find({ connected: true }).exec();
+  }
 
-	constructor() {}
+  // Get all users
+  async getUsers(): Promise<User[]> {
+    return this.userModel.find().exec();
+  }
 
-	async updateUser(user: User): Promise<User> {
-		const userIndex = this.database.findIndex(u => u._id === user._id);
-		this.database[userIndex] = user;
-		return user;
-	}
+  // Get a single user by ID
+  async getUser(id: string): Promise<User | null> {
+    return this.userModel.findById(id).exec();
+  }
 
-	async register(name: string, password: string): Promise<User> {
-		const user : User = { name, password, connected: false, votes: [], role: '', _id: '', isAlive: true};
-		this.database.push(user);
-		return user;
-	  }
+  // Create a new user
+  async createUser(user: User): Promise<User> {
+    const newUser = new this.userModel(user);
+    return newUser.save();
+  }
 
-	  async login(name: string, password: string): Promise<{ message: string, user : User }> {
-		const user = this.database.find(user => user.name === name && user.password === password);
-		if (user) {
-		  user.connected = true;
+  // Update a user
+  async updateUser(id: string, user: Partial<User>): Promise<User | null> {
+    return this.userModel.findByIdAndUpdate(id, user, { new: true }).exec();
+  }
 
-		  this.database.forEach(user => {
-			if (user.name === name && user.password === password) {
-			  user.connected = true;
-			}
-		  }
-		  );
-		  return { message: 'Connected', user };
-		}
-	  }
+  // Connect a user
+  async connect(id: string): Promise<User | null> {
+    return this.userModel.findByIdAndUpdate(id, { connected: true }, { new: true }).exec();
+  }
 
-	  async findConnected(): Promise<User[]> {
-		return this.database.filter(user => user.connected);
-	  }
+  // Disconnect a user
+  async disconnect(id: string): Promise<User | null> {
+    return this.userModel.findByIdAndUpdate(id, { connected: false }, { new: true }).exec();
+  }
 
-	  async disconnect(name: string): Promise<User> {
-		const user = this.database.find(user => user.name === name);
-		user.connected = false;
-		this.database.forEach(user => {
-		  if (user.name === name) {
-			user.connected = false;
-		  }
-		});
-		return user;
-	}
+  // Delete a user
+  async deleteUser(id: string): Promise<User | null> {
+    return this.userModel.findByIdAndDelete(id).exec();
+  }
+
+  // Login a user
+  async login(name: string, password: string): Promise<User | null> {
+    // Attempt to find the user by name and check password
+    const user = await this.userModel.findOne({ name, password }).exec();
+    if (!user) {
+      throw new Error('Invalid credentials');
+    }
+    return this.userModel.findByIdAndUpdate(user._id, { connected: true }, { new: true }).exec();
+  }
 }

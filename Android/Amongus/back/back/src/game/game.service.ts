@@ -1,72 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import Game from './Models/Game';
 
 @Injectable()
 export class GameService {
-  private users: any[] = [];
-  private votes: Map<string, string> = new Map();
-  private turn = 0;
+  constructor(
+	@InjectModel('Game') private readonly gameModel: Model<Game>,
+	// Add other models here
+  ) {}
 
-  connectUser(userId: string) {
-    const user = this.users.find(user => user.id === userId);
-    if (user) {
-      user.connected = true;
-    } else {
-      this.users.push({ id: userId, connected: true, alive: true, votesReceived: 0 });
-    }
+  async getGames(): Promise<Game[]> {
+	return this.gameModel.find().exec();
   }
 
-  disconnectUser(userId: string) {
-    const user = this.users.find(user => user.id === userId);
-    if (user) {
-      user.connected = false;
-    }
+  async getGame(id: string): Promise<Game> {
+	return this.gameModel.findById(id).exec();
   }
 
-  nextTurn() {
-    this.turn++;
-    this.votes.clear();
-    this.users.forEach(user => user.votesReceived = 0);
+  async createGame(game: Game): Promise<Game> {
+	const newGame = new this.gameModel(game);
+	return newGame.save();
   }
 
-  vote(voterId: string, votedId: string) {
-    this.votes.set(voterId, votedId);
-    const votedUser = this.users.find(user => user.id === votedId);
-    if (votedUser) {
-      votedUser.votesReceived++;
-    }
+  async updateGame(id: string, game: Game): Promise<Game> {
+	return this.gameModel.findByIdAndUpdate(id, game, { new: true });
   }
 
-  checkVotesCompletion() {
-    const connectedUsers = this.users.filter(user => user.connected);
-    return this.votes.size === connectedUsers.length;
-  }
-
-  processVotes() {
-    const results = [];
-    let maxVotes = 0;
-    this.users.forEach(user => {
-      if (user.votesReceived > maxVotes) {
-        maxVotes = user.votesReceived;
-      }
-    });
-    this.users.forEach(user => {
-      if (user.votesReceived === maxVotes) {
-        results.push(user.id);
-        user.alive = false; // Assuming the user with the most votes is eliminated
-      }
-    });
-    return results;
-  }
-
-  resetVotes() {
-    this.votes.clear();
-    this.users.forEach(user => user.votesReceived = 0);
-  }
-
-  killUser(userId: string) {
-    const user = this.users.find(user => user.id === userId);
-    if (user) {
-      user.alive = false;
-    }
+  async deleteGame(id: string): Promise<Game> {
+	return this.gameModel.findByIdAndDelete(id);
   }
 }
