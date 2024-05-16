@@ -5,7 +5,7 @@ import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
-	MongooseModule.forRoot('mongodb+srv://christoloisel:Rose230323@cluster0.soahdz4.mongodb.net/twitter'),
+	MongooseModule.forRoot('mongodb+srv://christoloisel:rose@cluster0.ppyauvl.mongodb.net/twitter'),
 	UserModule,
 	MessageModule,
   ],
