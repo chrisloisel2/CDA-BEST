@@ -1,82 +1,222 @@
 import 'package:flutter/material.dart';
 
 void main() {
-// Fonction main() qui est le point d'entrée de l'application
-// runApp() est une fonction qui permet de démarrer l'application et de lancer le widget racine
-// Ici, le widget racine est MyApp()
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // MyApp est un widget Stateless qui hérite de StatelessWidget
-
-  // un widget Stateless est un widget qui ne peut pas être modifié après sa création
-  const MyApp({super.key});
-
-  // La méthode build() est une méthode obligatoire pour les widgets
-  // Elle permet de construire l'interface graphique de mon widget pour l'afficher à l'écran
   @override
   Widget build(BuildContext context) {
-    // <- ici la logique de construction de l'interface graphique
-
-    // return la partie graphique de mon widget
-    // MaterialApp() est un widget qui permet de définir les paramètres de l'application
     return MaterialApp(
-      title: 'Flutter Demo', // titre de l'application
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ), // theme de l'application (couleurs, polices, etc.)
-      home: const MyHomePage(
-          title: 'Flutter Demo Home Page'), // page d'accueil de l'application
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Flutter Animation Demo'),
+        ),
+        body: ListView(
+          children: [
+            ScaleAnimation(),
+            FadeAnimation(),
+            RotateAnimation(),
+            SlideAnimation(),
+          ],
+        ),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
+// Animation de mise à l'échelle
+class ScaleAnimation extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _ScaleAnimationState createState() => _ScaleAnimationState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _ScaleAnimationState extends State<ScaleAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
-  final List<String> _list = [
-    'assets/1.png',
-    'assets/2.png',
-    'assets/3.png',
-    'assets/4.png'
-  ];
+  @override
+  void initState() {
+    // Initialisation de l'animation
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      if (_counter == _list.length) {
-        _counter = 0;
-      }
-    });
-    print('$_counter');
+    // Tween pour animer la taille de l'objet
+    _animation = Tween<double>(begin: 290, end: 300).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    // Lancer l'animation en boucle
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    // Arrêter l'animation
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // représentation graphique de la page d'accueil
-    return Scaffold(
-      // Utilisation du widget Scaffold pour définir la structure de la page
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(_list[_counter], width: 400, height: 400),
-            ElevatedButton(
-              onPressed: _incrementCounter,
-              child: const Text('Click me!'),
-            ),
-          ],
+    return Center(
+      child: Container(
+        margin: EdgeInsets.all(20),
+        width: _animation.value,
+        height: _animation.value,
+        color: Colors.blue,
+      ),
+    );
+  }
+}
+
+// Animation de fondu
+class FadeAnimation extends StatefulWidget {
+  @override
+  _FadeAnimationState createState() => _FadeAnimationState();
+}
+
+class _FadeAnimationState extends State<FadeAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+
+    // Tween pour animer l'opacité de l'objet
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.all(20),
+        width: 300,
+        height: 300,
+        color: Colors.red.withOpacity(_animation.value),
+      ),
+    );
+  }
+}
+
+// Animation de rotation
+class RotateAnimation extends StatefulWidget {
+  @override
+  _RotateAnimationState createState() => _RotateAnimationState();
+}
+
+class _RotateAnimationState extends State<RotateAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+
+    // Tween pour animer la rotation de l'objet
+    _animation = Tween<double>(begin: 0, end: 2 * 3.14159).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _controller.repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Transform.rotate(
+        angle: _animation.value,
+        child: Container(
+          margin: EdgeInsets.all(20),
+          width: 100,
+          height: 100,
+          color: Colors.green,
+        ),
+      ),
+    );
+  }
+}
+
+// Animation de glissement
+class SlideAnimation extends StatefulWidget {
+  @override
+  _SlideAnimationState createState() => _SlideAnimationState();
+}
+
+class _SlideAnimationState extends State<SlideAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+
+    // Tween pour animer la position de l'objet
+    _animation = Tween<Offset>(begin: Offset.zero, end: Offset(1.5, 0))
+        .animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SlideTransition(
+        position: _animation,
+        child: Container(
+          margin: EdgeInsets.all(20),
+          width: 100,
+          height: 100,
+          color: Colors.orange,
         ),
       ),
     );
