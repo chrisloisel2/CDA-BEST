@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api") // Définition de la route
+@CrossOrigin(origins = "http://localhost:3000") // Autorisation de requêtes depuis le port 3000
 public class UserController {
 
 	@Autowired // permet l'injection de dépendance
